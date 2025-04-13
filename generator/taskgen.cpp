@@ -61,5 +61,7 @@ int main(int argc, char* argv[]) {
         outTask(task); // Output the generated task parameters
     }
 
+    std::cout << "END" << std::endl; // Signal the end of the task generation
+
     return 0;
 }
