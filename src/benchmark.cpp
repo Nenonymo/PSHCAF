@@ -1,15 +1,29 @@
-#include "task.h"
 #include "taskParser.h"
+#include "Scheduler.h"
+#include "FCFSScheduler.h"
+#include "worker.h"
+
+#include <thread>
+#include <vector>
 
 int main(int argc, char** argv) {
-    if (argc < 2) {
-        std::cerr << "Usage: " << argv[0] << " <file_path>" << std::endl;
+    if (argc < 3) {
+        std::cerr << "Usage: " << argv[0] << " <file_path> <n_workers>" << std::endl;
         return 1;
     }
 
     std::string filePath = argv[1]; // Path to the FIFO file
+    unsigned int nWorkers = std::stoi(argv[2]); // Number of workers to create
     TaskParser parser(filePath); // Create a FIFO task parser
 
+    Scheduler* scheduler = new FCFSScheduler(); // Create a scheduler (FCFS in this case)
+
+    //Start worker threads
+    Worker** workers = new Worker*[nWorkers];
+    for (unsigned int i = 0; i < nWorkers; i++) {
+        workers[i] = new Worker(i, scheduler); // Create a worker with the scheduler
+        workers[i]->start(); // Start the worker thread
+    }
 
     do
     {
@@ -20,15 +34,19 @@ int main(int argc, char** argv) {
             break; // Exit if the end signal is received
         }
 
-        //start overhead timer
-        Task task(params); // Create a new task with the parameters
-        std::cout << task << std::endl; // Print the task parameters
-        //task.run(); // Run the task
-        //end overhead timer
-        
+        Task* task = new Task(params); // Create a new task with the parameters
+        scheduler->submitTask(task); // Submit the task to the scheduler
+
     } while (true);
     
     std::cout << "exiting..." << std::endl;
+
+    //Cleaning up the workers
+    for (unsigned int i = 0; i < nWorkers; ++i) {
+        workers[i]->join();
+        delete workers[i]; // clean up each Worker
+    }
+    delete[] workers; // clean up the array itself
 
 
     return 0; // Return 0 to indicate success    
