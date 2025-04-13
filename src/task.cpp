@@ -6,11 +6,13 @@ Task::Task(TaskParameters* params) {
 }
 
 Task::~Task() {
+    this->outStatistics(); // Output statistics before destruction
     delete params; // Clean up the allocated memory for params
 }
 
 unsigned int Task::run()
 {
+    startTime = std::chrono::high_resolution_clock::now(); // Start the task timer
     double x0 = -0.5;
     double y0 = 0.0;
     double s = 1.0 / params->zoom;
@@ -31,6 +33,7 @@ unsigned int Task::run()
         }
     }
 
+    taskTime = std::chrono::high_resolution_clock::now() - startTime; // Calculate task time
     return 0; // Return 0 to indicate success
 }
 
@@ -42,4 +45,16 @@ std::ostream& operator<<(std::ostream& os, const Task& task) {
     os << "Max Iter: " << task.getMaxIter() << std::endl;
     os << "Resolution: " << task.getResolution() << std::endl;
     return os;
+}
+
+void Task::recordQueueTime() {
+    startTime = std::chrono::high_resolution_clock::now();
+}
+
+void Task::recordDequeueTime() {
+    queueTime += std::chrono::high_resolution_clock::now() - startTime;
+}
+
+void Task::outStatistics() {
+    std::cout << "task;" << params->taskId << ";" << queueTime.count() << ";" << taskTime.count() << std::endl;
 }

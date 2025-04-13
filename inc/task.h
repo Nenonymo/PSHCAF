@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <chrono>
 #include "taskParameters.h"
 
 /**
@@ -10,6 +11,12 @@
 class Task {
     private:
         TaskParameters* params;
+
+        std::chrono::duration<double> taskTime{0}; // Task time for the task
+        std::chrono::duration<double> queueTime{0}; // Queue time for the task
+        std::chrono::high_resolution_clock::time_point startTime; // Start time for the task
+        
+        void outStatistics();
 
     public:
         /**
@@ -35,6 +42,9 @@ class Task {
         int getMaxIter() const { return params->max_iter; }
         int getResolution() const { return params->resolution; }
         unsigned int getTaskId() const { return params->taskId; }
+
+        void recordQueueTime();
+        void recordDequeueTime();
 };
 
 std::ostream& operator<<(std::ostream& os, const Task& task);
