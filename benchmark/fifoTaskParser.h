@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <stdexcept>
 
@@ -10,6 +11,7 @@
 class FifoTaskParser {
     private:
         std::ifstream fifoStream; // Stream for reading from the FIFO file
+        unsigned int taskCounter = 0;
 
         void close();
 
@@ -28,7 +30,7 @@ class FifoTaskParser {
 
         /**
          * @brief Read a task from the FIFO file and return the parameters.
-         * @return TaskParameters* pointer to the task parameters read from the FIFO
+         * @return TaskParameters* pointer to the task parameters read from the FIFO, null if received end signal
          * @throws std::runtime_error if reading from the FIFO fails
          */
         TaskParameters* getTask(); // Method to read a task from the FIFO
