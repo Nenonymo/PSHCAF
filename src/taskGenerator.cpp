@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
 
     std::mt19937 generator(seed); // Mersenne Twister random number generator
 
-    //std::cout << "Delay, Zoom, Max Iter, Resolution" << std::endl; // Header for the output
+    std::cout << "Delay, Zoom, Max Iter, Resolution" << std::endl; // Header for the output
     
     for (unsigned int i = 0; i < size; ++i) {
         FractalTaskParams task = generateFractalTaskParams(generator, time, variance); // Generate task parameters

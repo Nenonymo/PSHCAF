@@ -6,6 +6,9 @@ TaskParser::TaskParser(const std::string& filePath) {
     if (!fileStream.is_open()) {
         throw std::runtime_error("Failed to open file: " + filePath);
     }
+
+    std::string dummy;
+    std::getline(fileStream, dummy);
 }
 
 
