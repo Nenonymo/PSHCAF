@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <chrono>
+#include <cmath>
 #include "taskParameters.h"
 
 /**
@@ -15,7 +16,7 @@ class Task {
         std::chrono::duration<double> taskTime{0}; // Task time for the task
         std::chrono::duration<double> queueTime{0}; // Queue time for the task
         std::chrono::high_resolution_clock::time_point startTime; // Start time for the task
-        
+
         void outStatistics();
 
     public:
@@ -38,6 +39,7 @@ class Task {
          */
         unsigned int run();
 
+        double getCostEsitmation() const;
         double getZoom() const { return params->zoom; }
         int getMaxIter() const { return params->max_iter; }
         int getResolution() const { return params->resolution; }

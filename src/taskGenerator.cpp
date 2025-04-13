@@ -78,9 +78,15 @@ FractalTaskParams generateFractalTaskParams(std::mt19937 &generator, unsigned in
     return params;
 }
 
+double estimateCost(FractalTaskParams params) {
+    // Estimate the cost of the task based on its parameters
+    // This is a placeholder function and should be replaced with a proper cost estimation algorithm
+    return params.max_iter * params.resolution * params.resolution * (1.0 + std::log10(std::max(params.zoom, 1.0))) / 1e6;
+}
+
 void outTask(FractalTaskParams params) {
     // Output the task parameters in a format suitable for the benchmark
-    std::cout << params.delay << " " << params.zoom << " " << params.max_iter << " " << params.resolution << std::endl;
+    std::cout << params.delay << " " << params.zoom << " " << params.max_iter << " " << params.resolution << " " << estimateCost(params) << std::endl;
 }
 
 int main(int argc, char* argv[]) {
@@ -96,7 +102,7 @@ int main(int argc, char* argv[]) {
 
     std::mt19937 generator(seed); // Mersenne Twister random number generator
 
-    std::cout << "Delay, Zoom, Max Iter, Resolution" << std::endl; // Header for the output
+    std::cout << "Delay, Zoom, Max Iter, Resolution, Estimated cost" << std::endl; // Header for the output
     
     for (unsigned int i = 0; i < size; ++i) {
         FractalTaskParams task = generateFractalTaskParams(generator, time, variance); // Generate task parameters

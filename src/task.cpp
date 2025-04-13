@@ -47,6 +47,12 @@ std::ostream& operator<<(std::ostream& os, const Task& task) {
     return os;
 }
 
+double getCostEsitmation(TaskParameters* params) {
+    // Estimate the cost of the task based on its parameters
+    // This is a placeholder function and should be replaced with a proper cost estimation algorithm
+    return params->max_iter * params->resolution * params->resolution * (1.0 + std::log10(std::max(params->zoom, 1.0))) / 1e6;
+}
+
 void Task::recordQueueTime() {
     startTime = std::chrono::high_resolution_clock::now();
 }
