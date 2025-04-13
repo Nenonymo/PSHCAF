@@ -33,3 +33,13 @@ unsigned int Task::run()
 
     return 0; // Return 0 to indicate success
 }
+
+
+std::ostream& operator<<(std::ostream& os, const Task& task) {
+    os << "Task Parameters: " << std::endl;
+    os << "ID: " << task.getTaskId() << std::endl;
+    os << "Zoom: " << task.getZoom() << std::endl;
+    os << "Max Iter: " << task.getMaxIter() << std::endl;
+    os << "Resolution: " << task.getResolution() << std::endl;
+    return os;
+}

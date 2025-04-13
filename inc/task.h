@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include "taskParameters.h"
 
 /**
@@ -29,4 +30,11 @@ class Task {
          * @return 0 when done
          */
         unsigned int run();
+
+        double getZoom() const { return params->zoom; }
+        int getMaxIter() const { return params->max_iter; }
+        int getResolution() const { return params->resolution; }
+        unsigned int getTaskId() const { return params->taskId; }
 };
+
+std::ostream& operator<<(std::ostream& os, const Task& task);

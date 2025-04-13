@@ -22,14 +22,14 @@ int main(int argc, char** argv) {
 
         //start overhead timer
         Task task(params); // Create a new task with the parameters
-        task.run(); // Run the task
+        std::cout << task << std::endl; // Print the task parameters
+        //task.run(); // Run the task
         //end overhead timer
         
     } while (true);
     
     std::cout << "exiting..." << std::endl;
 
-    
 
     return 0; // Return 0 to indicate success    
 
