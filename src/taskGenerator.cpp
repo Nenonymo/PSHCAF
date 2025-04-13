@@ -38,7 +38,7 @@ FractalTaskParams generateFractalTaskParams(std::mt19937 &generator, unsigned in
 
 void outTask(FractalTaskParams params) {
     // Output the task parameters in a format suitable for the benchmark
-    std::cout << params.zoom << " " << params.max_iter << " " << params.resolution << " " << params.delay << std::endl;
+    std::cout << params.delay << " " << params.zoom << " " << params.max_iter << " " << params.resolution << std::endl;
 }
 
 int main(int argc, char* argv[]) {
@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
 
     std::mt19937 generator(seed); // Mersenne Twister random number generator
 
-    std::cout << "Zoom, Max Iter, Resolution, Delay" << std::endl; // Header for the output
+    //std::cout << "Delay, Zoom, Max Iter, Resolution" << std::endl; // Header for the output
     
     for (unsigned int i = 0; i < size; ++i) {
         FractalTaskParams task = generateFractalTaskParams(generator, time, variance); // Generate task parameters
