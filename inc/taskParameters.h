@@ -2,7 +2,7 @@
 
 struct TaskParameters {
     unsigned int taskId;
-    unsigned int zoom;
+    double zoom;
     unsigned int max_iter;
     unsigned int resolution;
 };
