@@ -8,7 +8,14 @@ BIN_DIR := bin
 INCLUDES := -Iinc
 
 # Source files
-BENCH_SRC := $(SRC_DIR)/task.cpp $(SRC_DIR)/taskParser.cpp $(SRC_DIR)/benchmark.cpp $(SRC_DIR)/scheduler.cpp $(SRC_DIR)/FCFSScheduler.cpp
+BENCH_SRC := \
+	$(SRC_DIR)/task.cpp \
+	$(SRC_DIR)/taskParser.cpp \
+	$(SRC_DIR)/benchmark.cpp \
+	$(SRC_DIR)/scheduler.cpp \
+	$(SRC_DIR)/FCFSScheduler.cpp \
+	$(SRC_DIR)/worker.cpp
+	
 GEN_SRC := $(SRC_DIR)/taskGenerator.cpp
 
 # Executables and their targets
