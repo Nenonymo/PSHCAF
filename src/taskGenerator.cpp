@@ -1,12 +1,24 @@
 // taskgen.cpp
-// Author: Némo Chentre
-// Date: 2023-10-01
+// Author: Nemo Chentre
+// Date: 2023-13-01
 // Description: Generates a dynamic workload for the benchmark using fed parameters
 
 #include <iostream>
 #include <string>
 #include <vector>
 #include <random>
+#include <cmath>
+#include <algorithm>
+
+
+#define MIN_ZOOM 1.0
+#define MAX_ZOOM 100.0
+#define MIN_MAX_ITER 1
+#define MAX_MAX_ITER 1000
+#define MIN_RESOLUTION 1
+#define MAX_RESOLUTION 1000
+#define MIN_DELAY 0
+#define MAX_DELAY 1000
 
 // Add your function declarations and other necessary includes here
 
@@ -17,21 +29,51 @@ struct FractalTaskParams {
     int delay;
 };
 
-FractalTaskParams generateFractalTaskParams(std::mt19937 &generator, unsigned int time, double variance) {
-    // Initialize domain for the fractal parameters
-    std::uniform_real_distribution<double> zoom_dist(0.1, 10.0);
-    std::uniform_int_distribution<int> max_iter_dist(1000, 10000);
-    std::uniform_int_distribution<int> resolution_dist(100, 1000);
-    std::uniform_int_distribution<int> delay_dist(0, time);
+int sampleControlled(int min, int max, double variance, std::mt19937 &generator) {
+    int median = (min + max) / 2;
+    // Edge cases
+    if (variance <= 0.0) return median;
+    if (variance >= 1.0) {
+        std::uniform_int_distribution<int> dist(min, max);
+        return dist(generator); // Uniform distribution for high variance
+    }
 
+    int maxDeviation = std::max(median-min, max-median); //worst case deviation
+    double stddev = maxDeviation * variance; //standard deviation
+
+    std::normal_distribution<> dist(median, stddev); // Normal distribution centered around the median
+    int val = static_cast<int>(dist(generator)); // Sample from the distribution
+
+    return std::clamp(val, min, max); // Ensure the value is within the bounds
+}
+
+double sampleControlled(double min, double max, double variance, std::mt19937 &generator) {
+    double median = (min + max) / 2;
+    // Edge cases
+    if (variance <= 0.0) return median;
+    if (variance >= 1.0) {
+        std::uniform_real_distribution<double> dist(min, max);
+        return dist(generator); // Uniform distribution for high variance
+    }
+
+    double maxDeviation = std::max(median-min, max-median); //worst case deviation
+    double stddev = maxDeviation * variance; //standard deviation
+
+    std::normal_distribution<double> dist(median, stddev); // Normal distribution centered around the median
+    double val = dist(generator); // Sample from the distribution
+
+    return std::clamp(val, min, max); // Ensure the value is within the bounds
+}
+
+FractalTaskParams generateFractalTaskParams(std::mt19937 &generator, unsigned int time, double variance) {
     // Generate parameters using seeded randomness
     //TODO: The variance need to be added later
     // For now, we will just use the uniform distributions
     FractalTaskParams params;
-    params.zoom = zoom_dist(generator);
-    params.max_iter = max_iter_dist(generator);
-    params.resolution = resolution_dist(generator);
-    params.delay = delay_dist(generator);
+    params.zoom = sampleControlled(MIN_ZOOM, MAX_ZOOM, variance, generator);
+    params.max_iter = sampleControlled(MIN_MAX_ITER, MAX_MAX_ITER, variance, generator);
+    params.resolution = sampleControlled(MIN_RESOLUTION, MAX_RESOLUTION, variance, generator);
+    params.delay = sampleControlled(MIN_DELAY, time, variance, generator);
 
     return params;
 }
