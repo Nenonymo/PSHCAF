@@ -8,12 +8,11 @@ BIN_DIR := bin
 INCLUDES := -Iinc
 
 # Source files
-BENCH_SRC := $(SRC_DIR)/task.cpp $(SRC_DIR)/fifoTaskParser.cpp $(SRC_DIR)/benchmark.cpp
+BENCH_SRC := $(SRC_DIR)/task.cpp $(SRC_DIR)/taskParser.cpp $(SRC_DIR)/benchmark.cpp
 GEN_SRC := $(SRC_DIR)/taskGenerator.cpp
-INJ_SRC := $(SRC_DIR)/taskInjector.cpp
 
 # Executables and their targets
-TARGETS := $(BIN_DIR)/benchmark $(BIN_DIR)/taskGenerator $(BIN_DIR)/taskInjector
+TARGETS := $(BIN_DIR)/benchmark $(BIN_DIR)/taskGenerator
 
 
 all: $(TARGETS)
@@ -23,9 +22,6 @@ $(BIN_DIR)/benchmark: $(BENCH_SRC) | $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $^
 
 $(BIN_DIR)/taskGenerator: $(GEN_SRC) | $(BIN_DIR)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $^
-
-$(BIN_DIR)/taskInjector: $(INJ_SRC) | $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $@ $^
 
 # Create the bin directory if it doesn't exist
