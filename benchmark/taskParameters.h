@@ -1,3 +1,5 @@
+#pragma once
+
 struct TaskParameters {
     unsigned int taskId;
     unsigned int zoom;
