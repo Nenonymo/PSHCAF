@@ -11,7 +11,7 @@ Task* Scheduler::getNextTask(int workerId) {
     // Wait until there are tasks available or the scheduler is finalized
     cv.wait(lock, [&] { return hasTasks() || finalized; });
 
-    if (finalized || !hasTasks()) {
+    if (finalized && !hasTasks()) {
         return nullptr; // Return nullptr if the scheduler is finalized or has no more tasks
     }
 

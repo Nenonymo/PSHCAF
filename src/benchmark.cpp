@@ -1,5 +1,5 @@
 #include "taskParser.h"
-#include "Scheduler.h"
+#include "scheduler.h"
 #include "FCFSScheduler.h"
 #include "worker.h"
 
@@ -38,13 +38,17 @@ int main(int argc, char** argv) {
         scheduler->submitTask(task); // Submit the task to the scheduler
 
     } while (true);
+
+    scheduler->finalize();
     
     std::cout << "exiting..." << std::endl;
 
     //Cleaning up the workers
     for (unsigned int i = 0; i < nWorkers; ++i) {
+        //std::cout << "Joining worker " << i << "..." << std::endl;
         workers[i]->join();
         delete workers[i]; // clean up each Worker
+        //std::cout << "Worker joined and deleted successfully" << std::endl;
     }
     delete[] workers; // clean up the array itself
 
