@@ -12,10 +12,10 @@
 
 
 #define MIN_ZOOM 1.0
-#define MAX_ZOOM 100.0
-#define MIN_MAX_ITER 1
-#define MAX_MAX_ITER 1000
-#define MIN_RESOLUTION 1
+#define MAX_ZOOM 10.0
+#define MIN_MAX_ITER 500
+#define MAX_MAX_ITER 2000
+#define MIN_RESOLUTION 100
 #define MAX_RESOLUTION 1000
 #define MIN_DELAY 0
 #define MAX_DELAY 1000
