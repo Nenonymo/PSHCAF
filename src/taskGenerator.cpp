@@ -11,12 +11,12 @@
 #include <algorithm>
 
 
-#define MIN_ZOOM 1.0
+#define MIN_ZOOM 0.5
 #define MAX_ZOOM 10.0
 #define MIN_MAX_ITER 500
 #define MAX_MAX_ITER 2000
-#define MIN_RESOLUTION 100
-#define MAX_RESOLUTION 1000
+#define MIN_RESOLUTION 700
+#define MAX_RESOLUTION 800
 #define MIN_DELAY 0
 #define MAX_DELAY 1000
 
@@ -72,8 +72,8 @@ FractalTaskParams generateFractalTaskParams(std::mt19937 &generator, double vari
     FractalTaskParams params;
     params.zoom = sampleControlled(MIN_ZOOM, MAX_ZOOM, variance, generator);
     params.max_iter = sampleControlled(MIN_MAX_ITER, MAX_MAX_ITER, variance, generator);
-    //params.resolution = sampleControlled(MIN_RESOLUTION, MAX_RESOLUTION, variance, generator);
-    params.resolution = 500;
+    params.resolution = sampleControlled(MIN_RESOLUTION, MAX_RESOLUTION, variance, generator);
+    //params.resolution = 500;
     params.delay = sampleControlled(MIN_DELAY, MAX_DELAY, variance, generator);
 
     return params;
