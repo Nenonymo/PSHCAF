@@ -3,10 +3,11 @@
 #include <iostream>
 #include <chrono>
 
-Worker::Worker(int id, Scheduler* scheduler)
+Worker::Worker(int id, Scheduler* scheduler, Verbose* verbose)
 {
     workerId = id; // Initialize the worker ID
     this->scheduler = scheduler; // Initialize the scheduler pointer
+    this->verbose = verbose; // Initialize the verbosity settings
 }
 
 void Worker::start()
@@ -40,5 +41,4 @@ void Worker::run()
         delete task; // Delete the task after running it
         taskTime += std::chrono::high_resolution_clock::now() - t1; // Calculate task time
     }
-    std::cout << "worker;" << workerId << "taskTime;" << taskTime.count() << ";overheadTime" << overheadTime.count() << std::endl; // Print overhead time
 }

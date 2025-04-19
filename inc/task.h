@@ -4,6 +4,7 @@
 #include <chrono>
 #include <cmath>
 #include "taskParameters.h"
+#include "verbose.h"
 
 /**
  * @brief Class representing a task to be executed.
@@ -12,6 +13,7 @@
 class Task {
     private:
         TaskParameters* params;
+        Verbose* verbose; // Pointer to verbosity settings
 
         std::chrono::duration<double> taskTime{0}; // Task time for the task
         std::chrono::duration<double> queueTime{0}; // Queue time for the task
@@ -25,7 +27,7 @@ class Task {
          * @arg params pointer to the task parameters to use for the task
          * @note The task will take ownership of the parameters and will delete them when done
          */
-        Task(TaskParameters* params);
+        Task(TaskParameters* params, Verbose* verbose);
 
         /**
          * @brief Destroy the Task object
@@ -39,7 +41,7 @@ class Task {
          */
         unsigned int run();
 
-        double getCostEsitmation() const;
+        double getCostEstimation(TaskParameters* params) const;
         double getZoom() const { return params->zoom; }
         int getMaxIter() const { return params->max_iter; }
         int getResolution() const { return params->resolution; }

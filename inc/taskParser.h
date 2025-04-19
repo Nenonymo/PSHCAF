@@ -9,6 +9,7 @@
 #include <chrono>
 
 #include "taskParameters.h"
+#include "verbose.h"
 
 class TaskParser {
     private:

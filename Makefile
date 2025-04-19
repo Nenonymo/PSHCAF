@@ -9,12 +9,13 @@ INCLUDES := -Iinc
 
 # Source files
 BENCH_SRC := \
+	$(SRC_DIR)/verbose.cpp \
 	$(SRC_DIR)/task.cpp \
 	$(SRC_DIR)/taskParser.cpp \
-	$(SRC_DIR)/benchmark.cpp \
+	$(SRC_DIR)/worker.cpp \
 	$(SRC_DIR)/scheduler.cpp \
 	$(SRC_DIR)/FCFSScheduler.cpp \
-	$(SRC_DIR)/worker.cpp
+	$(SRC_DIR)/benchmark.cpp
 	
 GEN_SRC := $(SRC_DIR)/taskGenerator.cpp
 

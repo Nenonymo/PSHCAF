@@ -1,8 +1,9 @@
 #include "task.h"
 
 
-Task::Task(TaskParameters* params) {
+Task::Task(TaskParameters* params, Verbose* verbose) {
     this->params = params;
+    this->verbose = verbose; // Initialize the verbosity settings
 }
 
 Task::~Task() {
@@ -33,7 +34,7 @@ unsigned int Task::run()
         }
     }
 
-    taskTime = std::chrono::high_resolution_clock::now() - startTime; // Calculate task time
+    this->taskTime = std::chrono::high_resolution_clock::now() - startTime; // Calculate task time
     return 0; // Return 0 to indicate success
 }
 
@@ -47,7 +48,7 @@ std::ostream& operator<<(std::ostream& os, const Task& task) {
     return os;
 }
 
-double getCostEsitmation(TaskParameters* params) {
+double Task::getCostEstimation(TaskParameters* params) const {
     // Estimate the cost of the task based on its parameters
     // This is a placeholder function and should be replaced with a proper cost estimation algorithm
     return params->max_iter * params->resolution * params->resolution * (1.0 + std::log10(std::max(params->zoom, 1.0))) / 1e6;
@@ -62,5 +63,17 @@ void Task::recordDequeueTime() {
 }
 
 void Task::outStatistics() {
-    std::cout << "task;" << params->taskId << ";" << queueTime.count() << ";" << taskTime.count() << std::endl;
+    if (verbose->TaskId) {
+        std::cout << params->taskId << ";";
+    }
+    if (verbose->TaskTime) {
+        std::cout << taskTime.count() << ";";
+    }
+    if (verbose->TaskQueue) {
+        std::cout << queueTime.count() << ";";
+    }
+    if (verbose->TaskCost) {
+        std::cout << getCostEstimation(params) << ";";
+    }    
+    std::cout << std::endl; // End the line after outputting all statistics
 }
