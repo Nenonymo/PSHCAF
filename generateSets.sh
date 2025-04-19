@@ -5,5 +5,5 @@ arg=("0.010" "0.018" "0.031" "0.056" "0.100" "0.180" "0.310" "0.560" "1.000")
 for i in "${!arg[@]}"; do
     variance="${arg[$i]}"
     echo "Running gen set with variance $variance and seed $i"
-    ./bin/taskGenerator 300 "$i" "$variance" > tasks/"$i".txt
+    ./bin/taskGenerator 2000 "$i" "$variance" > tasks/"$i".txt
 done

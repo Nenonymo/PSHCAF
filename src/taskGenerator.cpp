@@ -72,7 +72,8 @@ FractalTaskParams generateFractalTaskParams(std::mt19937 &generator, double vari
     FractalTaskParams params;
     params.zoom = sampleControlled(MIN_ZOOM, MAX_ZOOM, variance, generator);
     params.max_iter = sampleControlled(MIN_MAX_ITER, MAX_MAX_ITER, variance, generator);
-    params.resolution = sampleControlled(MIN_RESOLUTION, MAX_RESOLUTION, variance, generator);
+    //params.resolution = sampleControlled(MIN_RESOLUTION, MAX_RESOLUTION, variance, generator);
+    params.resolution = 500;
     params.delay = sampleControlled(MIN_DELAY, MAX_DELAY, variance, generator);
 
     return params;
