@@ -10,7 +10,6 @@ bin/
 
 # Temp files
 tmp/
-tasks/
 
 # Precompiled Headers
 *.gch
