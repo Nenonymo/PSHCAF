@@ -1,7 +1,8 @@
 #include "taskParser.h"
 
 
-TaskParser::TaskParser(const std::string& filePath) {
+TaskParser::TaskParser(const std::string& filePath, Verbose* verbose) {
+    this->verbose = verbose; // Initialize the verbosity settings
     fileStream.open(filePath, std::ios::in); // Open the file to read
     if (!fileStream.is_open()) {
         throw std::runtime_error("Failed to open file: " + filePath);

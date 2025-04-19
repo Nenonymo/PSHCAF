@@ -14,6 +14,7 @@
 class TaskParser {
     private:
         std::ifstream fileStream; // Stream for reading from the file
+        Verbose* verbose; // Pointer to verbosity settings
         unsigned int taskCounter = 0;
 
         void close();
@@ -24,7 +25,7 @@ class TaskParser {
          * @throws std::runtime_error if the file cannot be opened
          * @param filePath path to the file to use as input
          */
-        TaskParser(const std::string& filePath);
+        TaskParser(const std::string& filePath, Verbose* verbose); // Constructor to initialize the TaskParser with a file path
 
         /**
          * @brief Destroy the Task Parser:: Task Parser object

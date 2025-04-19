@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
     unsigned int nWorkers = std::stoi(argv[2]); // Number of workers to create
     Verbose verbose(argv[3]); // Pointer to verbosity settings
 
-    TaskParser parser(filePath); // Create a FIFO task parser
+    TaskParser parser(filePath, &verbose); // Create a FIFO task parser
 
     Scheduler* scheduler = new FCFSScheduler(); // Create a scheduler (FCFS in this case)
 
@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
         TaskParameters* params = parser.getTask(); // Get task parameters from the FIFO
 
         if (params == nullptr) {
-            std::cout << "Received end signal. Exiting..." << std::endl;
+            if (verbose.debug){std::cout << "Received end signal. Exiting..." << std::endl; }
             break; // Exit if the end signal is received
         }
 
@@ -43,14 +43,14 @@ int main(int argc, char** argv) {
 
     scheduler->finalize();
     
-    std::cout << "exiting..." << std::endl;
+    if (verbose.debug) {std::cout << "exiting..." << std::endl; }
 
     //Cleaning up the workers
     for (unsigned int i = 0; i < nWorkers; ++i) {
         //std::cout << "Joining worker " << i << "..." << std::endl;
         workers[i]->join();
         delete workers[i]; // clean up each Worker
-        //std::cout << "Worker joined and deleted successfully" << std::endl;
+        if (verbose.debug) {std::cout << "Worker joined and deleted successfully" << std::endl; }
     }
     delete[] workers; // clean up the array itself
 
