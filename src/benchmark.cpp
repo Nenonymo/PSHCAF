@@ -2,6 +2,7 @@
 #include "scheduler.h"
 #include "S_FCFS.h"
 #include "S_LCFS.h"
+#include "S_SJF.h"
 #include "worker.h"
 
 #include <thread>
@@ -34,6 +35,11 @@ int main(int argc, char** argv) {
         case 1: //LCFS
             scheduler = new S_LCFS();
             if (verbose.debug) {std::cout << "Scheduler: LCFS" << std::endl; }
+            break;
+
+        case 2: //SJF
+            scheduler = new S_SJF();
+            if (verbose.debug) {std::cout << "Scheduler: SJF" << std::endl; }
             break;
             
         default:
