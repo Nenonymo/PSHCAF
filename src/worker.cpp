@@ -17,8 +17,6 @@ void Worker::start()
 
 void Worker::join()
 {
-    if (verbose->ThreadStat)
-    {std::cout << workerId << ";" << "O=" << overheadTime.count() << ";" << "W:" << taskTime.count() << std::endl;}
     if (workerThread.joinable())
     {
         workerThread.join(); // Wait for the worker thread to finish
@@ -34,8 +32,14 @@ void Worker::run()
         overheadTime += std::chrono::high_resolution_clock::now() - t1; // Calculate overhead time
 
 
-        if (!task) //Scheduler finalized
+        if (!task) //Scheduler finalized and no more tasks
         {
+            if (verbose->ThreadStat)
+            {
+                std::cout << "W" << this->workerId <<
+                    ";O:" << this->overheadTime.count() <<
+                    ";R:" << this->taskTime.count() << std::endl;
+            }
             break;
         }
         t1 = std::chrono::high_resolution_clock::now(); // Start task timer

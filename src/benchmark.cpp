@@ -4,6 +4,7 @@
 #include "S_LCFS.h"
 #include "S_SJF.h"
 #include "S_LJF.h"
+#include "S_RR.h"
 #include "worker.h"
 
 #include <thread>
@@ -17,9 +18,7 @@ int main(int argc, char** argv) {
     }
 
     std::string filePath = argv[1]; // Path to the FIFO file
-    unsigned int nWorkers = std::stoi(argv[2]); // Number of workers to create
-    char* verboseArg = nullptr; // Default verbosity settings
-    if (argc < 5) {verboseArg = argv[4];}
+    unsigned int nWorker = std::stoi(argv[2]); // Number of workers to create
     Verbose verbose(argv[4]); // Pointer to verbosity settings
 
 
@@ -29,23 +28,28 @@ int main(int argc, char** argv) {
     switch (scheduler_ID)
     {
         case 0: //FCFS
-            scheduler = new S_FCFS();
+            scheduler = new S_FCFS(nWorker);
             if (verbose.debug) {std::cout << "Scheduler: FCFS" << std::endl; }
             break;
 
         case 1: //LCFS
-            scheduler = new S_LCFS();
+            scheduler = new S_LCFS(nWorker);
             if (verbose.debug) {std::cout << "Scheduler: LCFS" << std::endl; }
             break;
 
         case 2: //SJF
-            scheduler = new S_SJF();
+            scheduler = new S_SJF(nWorker);
             if (verbose.debug) {std::cout << "Scheduler: SJF" << std::endl; }
             break;
 
         case 3: //LJF
-            scheduler = new S_LJF();
-            if (verbose.debug) {std::cout << "Scheduler: SJF" << std::endl; }
+            scheduler = new S_LJF(nWorker);
+            if (verbose.debug) {std::cout << "Scheduler: LJF" << std::endl; }
+            break;
+
+        case 4: //LJF
+            scheduler = new S_RR(nWorker);
+            if (verbose.debug) {std::cout << "Scheduler: RR" << std::endl; }
             break;
             
         default:
@@ -58,8 +62,8 @@ int main(int argc, char** argv) {
 
 
     //Start worker threads
-    Worker** workers = new Worker*[nWorkers];
-    for (unsigned int i = 0; i < nWorkers; i++) {
+    Worker** workers = new Worker*[nWorker];
+    for (unsigned int i = 0; i < nWorker; i++) {
         workers[i] = new Worker(i, scheduler, &verbose); // Create a worker with the scheduler
         workers[i]->start(); // Start the worker thread
     }
@@ -83,7 +87,7 @@ int main(int argc, char** argv) {
     if (verbose.debug) {std::cout << "exiting..." << std::endl; }
 
     //Cleaning up the workers
-    for (unsigned int i = 0; i < nWorkers; ++i) {
+    for (unsigned int i = 0; i < nWorker; ++i) {
         //std::cout << "Joining worker " << i << "..." << std::endl;
         workers[i]->join();
         delete workers[i]; // clean up each Worker

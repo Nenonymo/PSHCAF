@@ -6,7 +6,7 @@
 class S_LCFS: public Scheduler
 {
     public:
-        S_LCFS() = default;
+        S_LCFS(unsigned int nWorker);
         ~S_LCFS() = default;
 
     protected:
@@ -15,4 +15,5 @@ class S_LCFS: public Scheduler
         Task* selectNextTask(int workerId) override; // Select the next task for the worker
         void enqueueTask(Task* task) override; // Enqueue a task
         bool hasTasks() const override; // Check if there are tasks available
+        bool hasTasks(unsigned int workerId) const override;
 };

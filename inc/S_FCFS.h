@@ -6,7 +6,7 @@
 class S_FCFS : public Scheduler
 {
     public:
-        S_FCFS() = default;
+        S_FCFS(unsigned int nWorker);
         ~S_FCFS() = default;
 
     protected:
@@ -15,4 +15,5 @@ class S_FCFS : public Scheduler
         Task* selectNextTask(int workerId) override; // Select the next task for the worker
         void enqueueTask(Task* task) override; // Enqueue a task
         bool hasTasks() const override; // Check if there are tasks available
+        bool hasTasks(unsigned int workerId) const override;
 };

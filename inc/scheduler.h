@@ -9,11 +9,11 @@
 class Scheduler
 {
     public:
-        Scheduler() = default;
-        ~Scheduler() = default;
+        Scheduler(unsigned int nWorker);
+        virtual ~Scheduler() = default;
 
         // public interface for workers to get the next task
-        Task* getNextTask(int workerId);
+        Task* getNextTask(unsigned int workerId);
 
         // public interface for the main thread to add a task to the queue
         void submitTask(Task* task);
@@ -21,6 +21,7 @@ class Scheduler
         void finalize();
 
     protected:
+        const unsigned int nWorker;
         std::mutex mtx;
         std::condition_variable cv;
         bool finalized = false; // flag to indicate if the scheduler is finalized
@@ -29,4 +30,5 @@ class Scheduler
         virtual Task* selectNextTask(int workerId) = 0;
         virtual void enqueueTask(Task* task) = 0;
         virtual bool hasTasks() const = 0;
+        virtual bool hasTasks(unsigned int workerId) const = 0;
 };

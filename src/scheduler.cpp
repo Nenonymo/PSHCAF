@@ -1,17 +1,19 @@
 #include <scheduler.h>
 
-
 /************************
  * MAIN CLASS INTERFACE *
  ************************/
 
-Task* Scheduler::getNextTask(int workerId) {
+Scheduler::Scheduler(unsigned int nWorker) 
+    : nWorker(nWorker) {}
+
+Task* Scheduler::getNextTask(unsigned int workerId) {
     std::unique_lock<std::mutex> lock(mtx); // Lock the mutex for thread safety
 
     // Wait until there are tasks available or the scheduler is finalized
-    cv.wait(lock, [&] { return hasTasks() || finalized; });
+    cv.wait(lock, [&] { return hasTasks(workerId) || finalized; });
 
-    if (finalized && !hasTasks()) {
+    if (finalized && !hasTasks(workerId)) {
         return nullptr; // Return nullptr if the scheduler is finalized or has no more tasks
     }
 

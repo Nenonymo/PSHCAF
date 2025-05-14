@@ -7,7 +7,7 @@
 class S_SJF : public Scheduler
 {
     public:
-        S_SJF() = default;
+        S_SJF(unsigned int nWorker);
         ~S_SJF() = default;
 
     protected:
@@ -16,4 +16,5 @@ class S_SJF : public Scheduler
         Task* selectNextTask(int workerId) override; //Selet next tak, blocking
         void enqueueTask(Task* task) override; //Enqueue a task, waking
         bool hasTasks() const override;
+        bool hasTasks(unsigned int workerId) const override;
 };
