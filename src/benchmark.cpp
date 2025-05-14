@@ -1,6 +1,7 @@
 #include "taskParser.h"
 #include "scheduler.h"
 #include "S_FCFS.h"
+#include "S_LCFS.h"
 #include "worker.h"
 
 #include <thread>
@@ -26,10 +27,15 @@ int main(int argc, char** argv) {
     switch (scheduler_ID)
     {
         case 0: //FCFS
-            scheduler = new FCFSScheduler();
+            scheduler = new S_FCFS();
             if (verbose.debug) {std::cout << "Scheduler: FCFS" << std::endl; }
             break;
-        
+
+        case 1: //LCFS
+            scheduler = new S_LCFS();
+            if (verbose.debug) {std::cout << "Scheduler: LCFS" << std::endl; }
+            break;
+            
         default:
             std::cerr << "Invalid scheduler ID. Exiting..." << std::endl;
             return 1; // Exit if the scheduler ID is invalid
@@ -38,7 +44,6 @@ int main(int argc, char** argv) {
 
     TaskParser parser(filePath, &verbose); // Create a FIFO task parser
 
-    Scheduler* scheduler = new S_FCFS(); // Create a scheduler (FCFS in this case)
 
     //Start worker threads
     Worker** workers = new Worker*[nWorkers];

@@ -11,7 +11,7 @@ INCLUDES := -Iinc
 BENCH_SRC := \
 	$(SRC_DIR)/*.cpp
 	
-GEN_SRC := $(SRC_DIR)/taskGenerator.cpp
+GEN_SRC := Generator/taskGenerator.cpp
 
 # Executables and their targets
 TARGETS := $(BIN_DIR)/benchmark $(BIN_DIR)/taskGenerator
