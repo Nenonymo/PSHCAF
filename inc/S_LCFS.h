@@ -1,16 +1,16 @@
 #pragma once
 
 #include "scheduler.h"
-#include <queue>
+#include <stack>
 
-class FCFSScheduler : public Scheduler
+class S_LCFS: public Scheduler
 {
     public:
-        FCFSScheduler() = default;
-        ~FCFSScheduler() = default;
+        S_LCFS() = default;
+        ~S_LCFS() = default;
 
     protected:
-        std::queue<Task*> taskQueue; // Queue to hold tasks
+        std::stack<Task*> taskStack; // Queue to hold tasks
 
         Task* selectNextTask(int workerId) override; // Select the next task for the worker
         void enqueueTask(Task* task) override; // Enqueue a task

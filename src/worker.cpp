@@ -17,6 +17,8 @@ void Worker::start()
 
 void Worker::join()
 {
+    if (verbose->ThreadStat)
+    {std::count << workerId << ";" << "O=" << overheadTime.count() << ";" << "W:" << taskTime.count() << std::endl;}
     if (workerThread.joinable())
     {
         workerThread.join(); // Wait for the worker thread to finish
