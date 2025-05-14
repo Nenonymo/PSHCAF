@@ -1,6 +1,6 @@
 #include "taskParser.h"
 #include "scheduler.h"
-#include "FCFSScheduler.h"
+#include "S_FCFS.h"
 #include "worker.h"
 
 #include <thread>
@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
 
     TaskParser parser(filePath, &verbose); // Create a FIFO task parser
 
-    Scheduler* scheduler = new FCFSScheduler(); // Create a scheduler (FCFS in this case)
+    Scheduler* scheduler = new S_FCFS(); // Create a scheduler (FCFS in this case)
 
     //Start worker threads
     Worker** workers = new Worker*[nWorkers];
