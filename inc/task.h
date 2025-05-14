@@ -42,6 +42,7 @@ class Task {
         unsigned int run();
 
         double getCostEstimation(TaskParameters* params) const;
+        double getCostEstimation() const;
         double getZoom() const { return params->zoom; }
         int getMaxIter() const { return params->max_iter; }
         int getResolution() const { return params->resolution; }
@@ -52,3 +53,17 @@ class Task {
 };
 
 std::ostream& operator<<(std::ostream& os, const Task& task);
+
+bool ascendingCostComparator(Task* taskA, Task* taskB);
+
+struct MaxCostComp {
+    bool operator()(Task* taskA, Task* taskB) const {
+        return ascendingCostComparator(taskA, taskB);
+    }
+};
+
+struct MinCostComp {
+    bool operator()(Task* taskA, Task* taskB) const {
+        return !ascendingCostComparator(taskA, taskB);
+    }
+};

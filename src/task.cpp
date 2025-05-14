@@ -54,6 +54,12 @@ double Task::getCostEstimation(TaskParameters* params) const {
     return params->max_iter * params->resolution * params->resolution * (1.0 + std::log10(std::max(params->zoom, 1.0))) / 1e6;
 }
 
+double Task::getCostEstimation() const {
+    // Estimate the cost of the task based on its parameters
+    // This is a placeholder function and should be replaced with a proper cost estimation algorithm
+    return params->max_iter * params->resolution * params->resolution * (1.0 + std::log10(std::max(params->zoom, 1.0))) / 1e6;
+}
+
 void Task::recordQueueTime() {
     startTime = std::chrono::high_resolution_clock::now();
 }
@@ -64,7 +70,7 @@ void Task::recordDequeueTime() {
 
 void Task::outStatistics() {
     if (verbose->TaskId) {
-        std::cout << params->taskId << ";";
+        std::cout << "T" << params->taskId << ";";
     }
     if (verbose->TaskTime) {
         std::cout << taskTime.count() << ";";
@@ -77,3 +83,8 @@ void Task::outStatistics() {
     }    
     std::cout << std::endl; // End the line after outputting all statistics
 }
+
+bool ascendingCostComparator(Task* taskA, Task* taskB){
+    return taskA->getCostEstimation() < taskB->getCostEstimation();
+}
+
