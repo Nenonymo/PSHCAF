@@ -1,31 +1,44 @@
-#include "S_RR.h"
+#include "S_LBW.h"
 
-S_RR::S_RR(unsigned int nWorker)
+TaskQueue* leastBusyQueue(TaskQueue* taskQueues, unsigned int nWorker) {
+    unsigned int lbq = 0;
+    for (unsigned int i = 1; i < nWorker; i++) {
+        if (taskQueues[i].cost < taskQueues[lbq].cost) {
+            lbq = i;
+        }
+    }
+    return &(taskQueues[lbq]);
+}
+
+S_LBW::S_LBW(unsigned int nWorker)
     : Scheduler(nWorker)
-    , taskQueues(new std::queue<Task*>[nWorker])
-    , nextWorker(0) 
-{}
+{
+    taskQueues = new TaskQueue[nWorker];
+    std::cout << "S_LBW init complete" << std::endl;
+}
 
-S_RR::~S_RR() { //Clean the array of queues
+S_LBW::~S_LBW() { //Clean the array of queues
     delete[] taskQueues;
 }
 
-Task* S_RR::selectNextTask(int workerId) {
-    Task* task = taskQueues[workerId].front();
-    taskQueues[workerId].pop();
+Task* S_LBW::selectNextTask(int workerId) {
+    Task* task = taskQueues[workerId].tasks.front();
+    taskQueues[workerId].tasks.pop();
+    taskQueues[workerId].cost = taskQueues[workerId].cost - task->getCostEstimation();
     task->recordDequeueTime();
     return task;
 }
 
-void S_RR::enqueueTask(Task* task) {
+void S_LBW::enqueueTask(Task* task) {
     task->recordQueueTime();
-    taskQueues[nextWorker].push(task);
-    incrementWorker();
+    TaskQueue* lbq = leastBusyQueue(taskQueues, nWorker);
+    lbq->cost = lbq->cost + task->getCostEstimation();
+    lbq->tasks.push(task);
 }
 
-bool S_RR::hasTasks() const {
+bool S_LBW::hasTasks() const {
     for (unsigned int wId = 0; wId < nWorker; wId++) {
-        if (!taskQueues[wId].empty())
+        if (!taskQueues[wId].tasks.empty())
         {
             return true;
         }
@@ -33,10 +46,6 @@ bool S_RR::hasTasks() const {
     return false;
 }
 
-bool S_RR::hasTasks(unsigned int workerId) const {
-    return !taskQueues[workerId].empty();
-}
-
-void S_RR::incrementWorker() {
-    nextWorker = (nextWorker+1) % nWorker;
+bool S_LBW::hasTasks(unsigned int workerId) const {
+    return !taskQueues[workerId].tasks.empty();
 }

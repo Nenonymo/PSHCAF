@@ -5,6 +5,7 @@
 #include "S_SJF.h"
 #include "S_LJF.h"
 #include "S_RR.h"
+#include "S_LBW.h"
 #include "worker.h"
 
 #include <thread>
@@ -52,6 +53,11 @@ int main(int argc, char** argv) {
             if (verbose.debug) {std::cout << "Scheduler: RR" << std::endl; }
             break;
             
+        case 5: //LBW
+            scheduler = new S_LBW(nWorker);
+            if (verbose.debug) {std::cout << "Scheduler: LBW" << std::endl; }
+            break;
+            
         default:
             std::cerr << "Invalid scheduler ID. Exiting..." << std::endl;
             return 1; // Exit if the scheduler ID is invalid
@@ -60,7 +66,7 @@ int main(int argc, char** argv) {
 
     TaskParser parser(filePath, &verbose); // Create a FIFO task parser
 
-
+    if (verbose.debug) {std::cout << "Starting worker threads" << std::endl; }
     //Start worker threads
     Worker** workers = new Worker*[nWorker];
     for (unsigned int i = 0; i < nWorker; i++) {
@@ -68,6 +74,7 @@ int main(int argc, char** argv) {
         workers[i]->start(); // Start the worker thread
     }
 
+    if(verbose.debug) {std::cout << "Starting parsing" << std::endl; }
     do
     {
         TaskParameters* params = parser.getTask(); // Get task parameters from the FIFO
