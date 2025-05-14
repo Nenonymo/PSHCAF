@@ -3,8 +3,8 @@
 
 
 Verbose::Verbose(char* arg) {
-    this->debug = false;
-    this->ThreadStat = false;
+    this->debug = true;
+    this->ThreadStat = true;
     this->TaskId = false;
     this->TaskTime = false;
     this->TaskQueue = false;
@@ -22,6 +22,17 @@ Verbose::Verbose(char* arg) {
                     case 3: TaskTime = true; break;
                     case 4: TaskQueue = true; break;
                     case 5: TaskCost = true; break;
+                }
+            }
+            else 
+            {
+                switch (i) {
+                    case 0: debug = false; break; // Enable debug mode
+                    case 1: ThreadStat = false; break;
+                    case 2: TaskId = false; break;
+                    case 3: TaskTime = false; break;
+                    case 4: TaskQueue = false; break;
+                    case 5: TaskCost = false; break;
                 }
             }
         }

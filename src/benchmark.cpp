@@ -7,14 +7,34 @@
 #include <vector>
 
 int main(int argc, char** argv) {
+    //Read amount of arguments from command line
     if (argc < 4) {
-        std::cerr << "Usage: " << argv[0] << " <file_path> <n_workers> [verbose]" << std::endl;
+        std::cerr << "Usage: " << argv[0] << " <file_path> <n_workers> <heuristic_ID> [verbose]" << std::endl;
         return 1;
     }
 
     std::string filePath = argv[1]; // Path to the FIFO file
     unsigned int nWorkers = std::stoi(argv[2]); // Number of workers to create
-    Verbose verbose(argv[3]); // Pointer to verbosity settings
+    char* verboseArg = nullptr; // Default verbosity settings
+    if (argc < 5) {verboseArg = argv[4];}
+    Verbose verbose(argv[4]); // Pointer to verbosity settings
+
+
+    //Select Scheduler
+    unsigned int scheduler_ID = std::stoi(argv[3]); // Scheduler ID from command line argument
+    Scheduler* scheduler = nullptr;
+    switch (scheduler_ID)
+    {
+        case 0: //FCFS
+            scheduler = new FCFSScheduler();
+            if (verbose.debug) {std::cout << "Scheduler: FCFS" << std::endl; }
+            break;
+        
+        default:
+            std::cerr << "Invalid scheduler ID. Exiting..." << std::endl;
+            return 1; // Exit if the scheduler ID is invalid
+            break;
+    }
 
     TaskParser parser(filePath, &verbose); // Create a FIFO task parser
 
