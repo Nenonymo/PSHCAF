@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
             if (verbose.debug) {std::cout << "Scheduler: LJF" << std::endl; }
             break;
 
-        case 4: //LJF
+        case 4: //RR
             scheduler = new S_RR(nWorker);
             if (verbose.debug) {std::cout << "Scheduler: RR" << std::endl; }
             break;
