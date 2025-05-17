@@ -6,6 +6,7 @@
 #include "S_LJF.h"
 #include "S_RR.h"
 #include "S_LBW.h"
+#include "S_WS.h"
 #include "worker.h"
 
 #include <thread>
@@ -58,6 +59,11 @@ int main(int argc, char** argv) {
             if (verbose.debug) {std::cout << "Scheduler: LBW" << std::endl; }
             break;
             
+        case 6: //WS
+            scheduler = new S_WS(nWorker);
+            if (verbose.debug) {std::cout << "Scheduler: WS" << std::endl; }
+            break;
+
         default:
             std::cerr << "Invalid scheduler ID. Exiting..." << std::endl;
             return 1; // Exit if the scheduler ID is invalid
