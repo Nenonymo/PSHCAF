@@ -14,7 +14,6 @@ S_LBW::S_LBW(unsigned int nWorker)
     : Scheduler(nWorker)
 {
     taskQueues = new TaskQueue[nWorker];
-    std::cout << "S_LBW init complete" << std::endl;
 }
 
 S_LBW::~S_LBW() { //Clean the array of queues

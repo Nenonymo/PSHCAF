@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
             scheduler = new S_RR(nWorker);
             if (verbose.debug) {std::cout << "Scheduler: RR" << std::endl; }
             break;
-            
+
         case 5: //LBW
             scheduler = new S_LBW(nWorker);
             if (verbose.debug) {std::cout << "Scheduler: LBW" << std::endl; }
