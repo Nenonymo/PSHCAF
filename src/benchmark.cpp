@@ -27,6 +27,7 @@ int main(int argc, char** argv) {
     //Select Scheduler
     unsigned int scheduler_ID = std::stoi(argv[3]); // Scheduler ID from command line argument
     Scheduler* scheduler = nullptr;
+    std::chrono::duration<double> queuingTime{0}; // Variable to hold the queuing time
     switch (scheduler_ID)
     {
         case 0: //FCFS
@@ -72,39 +73,45 @@ int main(int argc, char** argv) {
 
     TaskParser parser(filePath, &verbose); // Create a FIFO task parser
 
-    if (verbose.debug) {std::cout << "Starting worker threads" << std::endl; }
     //Start worker threads
+    if (verbose.debug) {printf("Starting worker threads\n"); }
     Worker** workers = new Worker*[nWorker];
     for (unsigned int i = 0; i < nWorker; i++) {
         workers[i] = new Worker(i, scheduler, &verbose); // Create a worker with the scheduler
         workers[i]->start(); // Start the worker thread
     }
 
-    if(verbose.debug) {std::cout << "Starting parsing" << std::endl; }
+    if(verbose.debug) {printf("Starting parsing\n"); }
     do
     {
         TaskParameters* params = parser.getTask(); // Get task parameters from the FIFO
 
         if (params == nullptr) {
-            if (verbose.debug){std::cout << "Received end signal. Exiting..." << std::endl; }
+            if (verbose.debug){printf("Received end signal.\n"); }
             break; // Exit if the end signal is received
         }
-
+        
+        //Scheduling task
+        auto t1 = std::chrono::high_resolution_clock::now(); // Start the timer for task enqueuing
         Task* task = new Task(params, &verbose); // Create a new task with the parameters
         scheduler->submitTask(task); // Submit the task to the scheduler
+        queuingTime += std::chrono::high_resolution_clock::now() - t1; // Calculate the queuing time
 
     } while (true);
 
     scheduler->finalize();
     
-    if (verbose.debug) {std::cout << "exiting..." << std::endl; }
+    if (verbose.debug) {printf("Starting exit procedure\n"); }
+
+    // Print the queuing time
+    if (verbose.ThreadStat) {printf("M0:%f\n", queuingTime.count()); }
 
     //Cleaning up the workers
     for (unsigned int i = 0; i < nWorker; ++i) {
         //std::cout << "Joining worker " << i << "..." << std::endl;
         workers[i]->join();
         delete workers[i]; // clean up each Worker
-        if (verbose.debug) {std::cout << "Worker joined and deleted successfully" << std::endl; }
+        if (verbose.debug) {printf("Worker %u joined and deleted successfully\n", i); }
     }
     delete[] workers; // clean up the array itself
 

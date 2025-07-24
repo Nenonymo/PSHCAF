@@ -19,6 +19,9 @@ void Worker::join()
 {
     if (workerThread.joinable())
     {
+        if (verbose->ThreadStat) 
+        {printf("W%u;O:%f;R:%f\n", workerId, overheadTime.count(), taskTime.count()); }
+
         workerThread.join(); // Wait for the worker thread to finish
     }
 }
@@ -31,17 +34,12 @@ void Worker::run()
         Task* task = scheduler->getNextTask(workerId); // Get the next task from the scheduler
         overheadTime += std::chrono::high_resolution_clock::now() - t1; // Calculate overhead time
 
-
-        if (!task) //Scheduler finalized and no more tasks
+        if (!task) // If no task is available, exit the loop
         {
-            if (verbose->ThreadStat)
-            {
-                std::cout << "W" << this->workerId <<
-                    ";O:" << this->overheadTime.count() <<
-                    ";R:" << this->taskTime.count() << std::endl;
-            }
-            break;
+            if (verbose->debug) { printf("Worker %u received end signal\n", this->workerId); }
+            break; // Exit if the end signal is received
         }
+
         t1 = std::chrono::high_resolution_clock::now(); // Start task timer
         task->run(); // Run the task
         delete task; // Delete the task after running it
