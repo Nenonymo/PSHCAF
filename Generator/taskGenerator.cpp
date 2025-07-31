@@ -18,7 +18,7 @@
 #define MIN_RESOLUTION 200
 #define MAX_RESOLUTION 700
 #define MIN_DELAY 0
-#define MAX_DELAY 350
+#define MAX_DELAY 275
 
 // Add your function declarations and other necessary includes here
 

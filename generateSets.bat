@@ -17,7 +17,7 @@ set arg[9]=1.000
 for /L %%i in (0,1,9) do (
     set "variance=!arg[%%i]!"
     echo Running gen set with variance !variance! and seed %%i
-    bin\taskGenerator.exe 1000 %%i !variance! 200 > tasks\%%i.txt
+    bin\taskGenerator.exe 3000 %%i !variance! 300 > tasks\%%i.txt
 )
 
 endlocal
