@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <thread>
 #include <chrono>
+#include <vector>
 
 #include "taskParameters.h"
 #include "verbose.h"
@@ -16,6 +17,7 @@ class TaskParser {
         std::ifstream fileStream; // Stream for reading from the file
         Verbose* verbose; // Pointer to verbosity settings
         unsigned int taskCounter = 0;
+        std::locale loc;
 
         void close();
 

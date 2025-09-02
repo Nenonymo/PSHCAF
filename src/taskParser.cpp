@@ -1,5 +1,23 @@
 #include "taskParser.h"
 
+struct nbsp_ctype : std::ctype<char> {
+    using base = std::ctype<char>;
+    std::vector<mask> table_;
+    nbsp_ctype() : base(get_table()) {}
+    static const mask* get_table() {
+        static std::vector<mask> v(table_size, mask());
+        static bool init = []{
+            // Start from classic table
+            for (std::size_t i=0;i<table_size;++i) v[i] = std::ctype<char>::classic_table()[i];
+            // Mark NBSP byte (0xA0) as space in Latin-1 single-byte encodings
+            v[0xA0] |= space;
+            return true;
+        }();
+        (void)init;
+        return &v[0];
+    }
+};
+
 
 TaskParser::TaskParser(const std::string& filePath, Verbose* verbose) {
     this->verbose = verbose; // Initialize the verbosity settings
@@ -7,6 +25,7 @@ TaskParser::TaskParser(const std::string& filePath, Verbose* verbose) {
     if (!fileStream.is_open()) {
         throw std::runtime_error("Failed to open file: " + filePath);
     }
+    loc = std::locale(std::locale::classic(), new nbsp_ctype());
 
     std::string dummy;
     std::getline(fileStream, dummy);
@@ -35,13 +54,14 @@ TaskParameters* TaskParser::getTask() {
 
     // Trim leading and trailing non-printable chars (including BOM)
     line.erase(0, line.find_first_not_of(" \t\r\n\xEF\xBB\xBF")); // left-trim
-    line.erase(line.find_last_not_of(" \t\r\n") + 1);              // right-trim
+    line.erase(line.find_last_not_of(" \t\r\n") + 1);    // right-trim
 
     if(line == "END") {
         return nullptr; // Return nullptr if the end of the stream is reached
     }
     
     std::istringstream iss(line); // Create a stream from the line read from the file
+    iss.imbue(loc); // Ensure '.' is treated as decimal separator
     int delay;
     TaskParameters* params = new TaskParameters(); // Create a new TaskParameters object
 
