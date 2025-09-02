@@ -19,10 +19,9 @@ void Worker::join()
 {
     if (workerThread.joinable())
     {
+        workerThread.join(); // Wait for the worker thread to finish
         if (verbose->ThreadStat) 
         {printf("W%u;O:%f;R:%f\n", workerId, overheadTime.count(), taskTime.count()); }
-
-        workerThread.join(); // Wait for the worker thread to finish
     }
 }
 
