@@ -71,22 +71,29 @@ void Task::recordDequeueTime() {
 void Task::outStatistics() {
     std::string output = "";
     if (verbose->TaskId) {
-        output += "T" + std::to_string(params->taskId) + ";";
+        output += "TI" + std::to_string(params->taskId) + ";";
+    }
+    if (verbose->TaskWorkerID) {
+        output += "TW" + std::to_string(workerId) + ";";
     }
     if (verbose->TaskTime) {
-        output += std::to_string(taskTime.count()) + ";";
+        output += "TT" + std::to_string(taskTime.count()) + ";";
     }
     if (verbose->TaskQueue) {
-        output += std::to_string(queueTime.count()) + ";";
+        output += "TQ" + std::to_string(queueTime.count()) + ";";
     }
     if (verbose->TaskCost) {
-        output += std::to_string(getCostEstimation(params)) + ";";
-    }  
-    
+        output += "TC" + std::to_string(getCostEstimation(params)) + ";";
+    }
+
     if (!output.empty()) {printf((output+"\n").c_str()); }
 }
 
 bool ascendingCostComparator(Task* taskA, Task* taskB){
     return taskA->getCostEstimation() < taskB->getCostEstimation();
+}
+
+void Task::recordWorker(int workerId) {
+    this->workerId = workerId;
 }
 

@@ -40,6 +40,7 @@ void Worker::run()
         }
 
         t1 = std::chrono::high_resolution_clock::now(); // Start task timer
+        task->recordWorker(workerId); // Record the worker ID for the task
         task->run(); // Run the task
         delete task; // Delete the task after running it
         taskTime += std::chrono::high_resolution_clock::now() - t1; // Calculate task time

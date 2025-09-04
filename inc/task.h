@@ -18,6 +18,7 @@ class Task {
         std::chrono::duration<double> taskTime{0}; // Task time for the task
         std::chrono::duration<double> queueTime{0}; // Queue time for the task
         std::chrono::high_resolution_clock::time_point startTime; // Start time for the task
+        unsigned int workerId = -1; // ID of the worker that processed the task
 
         void outStatistics();
 
@@ -50,6 +51,7 @@ class Task {
 
         void recordQueueTime();
         void recordDequeueTime();
+        void recordWorker(int workerId);
 };
 
 std::ostream& operator<<(std::ostream& os, const Task& task);

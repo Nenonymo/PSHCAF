@@ -12,6 +12,7 @@ class Verbose {
 
         //Task verbosity settings
         bool TaskId;
+        bool TaskWorkerID;
         bool TaskTime;
         bool TaskQueue;
         bool TaskCost;
